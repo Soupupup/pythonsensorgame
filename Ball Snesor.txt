@@ -1,0 +1,86 @@
+import RPi.GPIO as GPIO
+#ADC0832 measures the strength of voice from sound sensor
+import ADC0832
+import time
+
+MIC_DO_PIN = 15
+
+GPIO.setmode(GPIO.BOARD)	
+
+#returns the voice volume
+def volume(ev=None):
+    GPIO.setup(MIC_DO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	ADC0832.setup()
+    #gets value of volume of the voice
+	analogVal = ADC0832.getResult()
+    return analogVal
+	#print 'res = %d' % res
+    
+import sys,pygame
+pygame.init()
+#size of window
+size = width,height = 600,400
+speed = [4,4]
+#sets window size and insert backgorund image
+screen = pygame.display.set_mode(size)
+bg = pygame.image.load("bg.png")
+
+#insert ball and targe iamge
+ball = pygame.image.load("")
+target = pygame.image.load("")
+#set up ball and target
+ballrect= ball.get_rect()
+targetrect=target.get_rect()
+targetrect.x=width
+#sets the height of target to random (within width of window screen)
+targetrect.y=random.randrange(0,400)
+
+#display text for when th ball hits something
+def GameOver(strike):
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT: sys.exit()
+		screen.fill(black)
+        #display text for when ball  hits the target
+        if strike == True:
+            textSurfaceObj = fontObj.render(("You've hit the target!")),True,skyblue)	
+        #display text for when ball hits the edge of screen
+        else:
+            textSurfaceObj = fontObj.render(("Try again!")),True,skyblue)
+		textRectObj = textSurfaceObj.get_rect()
+		textRectObj.center = (width/2,height/2)
+		screen.blit(gameover,gameoverrect)
+		screen.blit(textSurfaceObj,textRectObj)
+		pygame.display.flip()
+
+
+
+running = True
+angle=45
+
+while running:
+    #sets the speed as the vlume of the voice
+    speed=micISR
+    gameDisplay.blit(bg, (0, 0))
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT: sys.exit()
+    #calculates trajectory of the ball
+    ballrect.x+=math.cos(angle)*speed
+    ballrect.y+=sin.cos(angle)*speed
+    
+    #displays text and stops game with ball collides with target
+    if ball.rect.colliderect(targetrect):
+        GameOver(True)
+        running = False
+        
+    #displays text and stops game with ball collides edges of the window
+    else if (ball.rect.y>height):
+        GameOver(False)
+        running = False
+    else if ball.rect.x>width:
+        GameOver(False)
+        running = False
+    else if ball.rect.y==0:
+        GameOver(False)
+        running = False
+
